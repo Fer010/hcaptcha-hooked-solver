@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Hcaptcha Hooked Solver
 // @namespace    hcaptcha.hookedsolver
-// @version      1.3
+// @version      1.4
 // @description  Hcaptcha Solver hooked on a Tab
 // @author       satology
 // @downloadURL  https://gitlab.com/dev-userscripts/hcaptcha-hooked-solver/-/raw/main/HcaptchaHookedSolver.user.js
@@ -53,6 +53,8 @@
 // ***************************************************************************************************
 
 //* CHANGELOG */
+// VERSION 1.3:
+//  I)    Adjustments to fix memory leaks
 // VERSION 1.2:
 //  I)    Loading images with GM_XMLHttpRequest to bypass CORS validation
 //  II)   Added a flag (CONSOLELOG_EACH_IMG_PREDICTION) for debugging purposes
