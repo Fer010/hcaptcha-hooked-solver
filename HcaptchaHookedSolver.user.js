@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Hcaptcha Hooked Solver
 // @namespace    hcaptcha.hookedsolver
-// @version      1.6
+// @version      1.7
 // @description  Hcaptcha Solver hooked on a Tab
 // @author       satology
 // @updateURL    https://gitlab.com/dev-userscripts/hcaptcha-hooked-solver/-/raw/main/HcaptchaHookedSolver.user.js
