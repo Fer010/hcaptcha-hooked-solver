@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Hcaptcha Hooked Solver
 // @namespace    hcaptcha.hookedsolver
-// @version      1.8
+// @version      1.9
 // @description  Hcaptcha Solver hooked on a Tab
 // @author       satology
 // @updateURL    https://gitlab.com/dev-userscripts/hcaptcha-hooked-solver/-/raw/main/HcaptchaHookedSolver.meta.js
@@ -72,7 +72,7 @@
 // ==/UserScript==
 (async function() {
     // @v1.2 ->
-    const CONSOLELOG_EACH_IMG_PREDICTION = false;
+    const CONSOLELOG_EACH_IMG_PREDICTION = true;
     // <- @v1.2
     // @v1.1 ->
     /* If USE_TF_SERVER = true, it will try to use a single TF instance */
