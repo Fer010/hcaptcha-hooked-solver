@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Hcaptcha Hooked Solver
 // @namespace    hcaptcha.hookedsolver
-// @version      1.5
+// @version      1.6
 // @description  Hcaptcha Solver hooked on a Tab
 // @author       satology
 // @updateURL    https://gitlab.com/dev-userscripts/hcaptcha-hooked-solver/-/raw/main/HcaptchaHookedSolver.user.js
@@ -53,8 +53,8 @@
 // * BSC Network: 0x4b390bb0ffD7DE4B1632eaFd37546dD0E9357b22                                         *
 // ***************************************************************************************************
 
-//* CHANGELOG */
-// VERSION 1.3:
+//* RELEVANT CHANGELOG */
+// VERSION 1.6:
 //  I)    Adjustments to fix memory leaks
 // VERSION 1.2:
 //  I)    Loading images with GM_XMLHttpRequest to bypass CORS validation
@@ -129,7 +129,6 @@
 
     //Guess/Match New Images
     const MATCH_IMAGES_USING_TRAINER = false;
-    const GUESS_NEW_IMAGE_TYPE = false;
 
     //Node Selectors
     const CHECK_BOX = "#checkbox";
@@ -279,7 +278,6 @@
             onerror: function(e) {
                 //Using Fallback TensorFlow
                 if (e && e.status && e.status != 0) {
-                    // console.log(e);
                     // console.log("Using Fallback");
                 }
                 matchImagesUsingTensorFlow(imageUrl, word, i);
@@ -1495,50 +1493,6 @@
                     }
                 });
 
-//                 let img = new Image();
-//                 img.crossOrigin = "Anonymous";
-//                 //console.log(next.url);
-//                 img.src = next.url;
-//                 img.onload = () => {
-//                     initializeTensorFlowMobilenetModel().then(model => model.classify(img)).then(function(predictions) {
-//                         let s = solving.find( e => e.id == next.request ); // retrieve request data (words)
-//                         let notClickable = true; // flag it as not clickable
-//                         dataForDebug.word = s.word
-
-//                         var predictionslen = predictions.length;
-//                         for (var j = 0; j < predictionslen; j++) {
-//                             dataForDebug.predictions.push(predictions[j].className);
-//                             var probability = 0.077; // review
-//                             if (probabilityForObject.get(predictions[j].className)) {
-//                                 probability = probabilityForObject.get(predictions[j].className);
-//                             }
-
-//                             if (predictions[j].className.includesOneOf(s.words) && predictions[j].probability > probability) {
-//                                 // qSelectorAll(TASK_IMAGE)[i].click();
-//                                 s.clickables.push(next.idx); // add it to the array of clickables
-//                                 notClickable = false; // switch flag
-//                                 break;
-//                             }
-//                         }
-//                         dataForDebug.result = JSON.stringify(predictions);
-//                         console.log(dataForDebug);
-//                         if (notClickable) { // dump it to the log. Could be use for ML later
-//                         }
-//                         s.solvedCount++;
-//                         img.removeAttribute("src");
-
-//                         if(s.solvedCount == 9) { // if all 9 were reviewed, save the solution so it can be retrieved by the listener
-//                             //TODO: if s.clickables = 0 then it should refresh the challenge, or lower probability threshold and retry
-//                             console.log(`Sending back results. Clickables images: `, JSON.stringify(s.clickables));
-//                             GM_setValue(s.id, JSON.stringify(s));
-//                         }
-//                         solveNextImage(); // move to next image
-//                     });
-//                 };
-//                 img.onerror = (errMsg) => {
-//                     console.log(`Error loading an image: ${errMsg}`);
-//                     solveNextImage(); // move to next image
-//                 };
             } else {
                 isSolving = false; // stop looping if there's nothing to solve
             }
@@ -1550,7 +1504,6 @@
     // v1.1
     /* Tries to delete orphan requests (older than 15 minutes) */
     async function deleteOrphans() {
-        console.log(`Trying to delete orphans from storage`);
         let allValues = await GM_listValues();
         let toDelete = [];
 
@@ -1566,14 +1519,12 @@
                 }
             });
             toDelete.forEach( x => {
-                console.log(`Deleting ${x} from storage`);
                 GM_deleteValue(x);
             });
         } catch (err) {
             console.log(`Error at deleteOrphans: ${err}`);
         }
     }
-
 
     // Start process based on where we are:
     switch(instanceType) {
@@ -1592,13 +1543,9 @@
             break;
         case 'CBOX':
             var checkboxInterval = setInterval(function() {
-                if (!qSelector(CHECK_BOX)) {
-                    //Wait until the checkbox element is visible
-                } else if (qSelector(CHECK_BOX).getAttribute(ARIA_CHECKED) == "true") {
+                if (qSelector(CHECK_BOX).getAttribute(ARIA_CHECKED) == "true") {
                     clearInterval(checkboxInterval);
                 } else if (!isHidden(qSelector(CHECK_BOX)) && qSelector(CHECK_BOX).getAttribute(ARIA_CHECKED) == "false" && qSelector('#anchor').getAttribute(ARIA_HIDDEN) == "false") {
-                    // v1.1 : Added #anchor aria hidden check to click the checkbox only once
-                    // } else if (!isHidden(qSelector(CHECK_BOX)) && qSelector(CHECK_BOX).getAttribute(ARIA_CHECKED) == "false") {
                     qSelector(CHECK_BOX).click();
                 } else {
                     return;
@@ -1608,14 +1555,9 @@
             break;
         case 'CHALLENGE':
             try {
-                // v1.1 Preloading removed
-                // await initializeTesseractWorker();
-                // await initializeTensorFlowModel();
-                // await initializeTensorFlowMobilenetModel();
                 selectImages();
             } catch (err) {
                 // console.log(err);
-                // console.log("Tesseract could not be initialized");
             }
             break;
     }
